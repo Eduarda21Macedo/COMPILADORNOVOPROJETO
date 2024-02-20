@@ -27,7 +27,7 @@ public class CodeGenerationTest extends TestSupport {
     @Test
     public void testSimpleExpression () {
         var input = """
-            10 + 30
+            10 + 30 + 40
             """;
         
         var parser = new Parser(input.getBytes(StandardCharsets.UTF_8));
@@ -36,7 +36,9 @@ public class CodeGenerationTest extends TestSupport {
         String expected = """
                 push constant 10
                 push constant 30
-                add       
+                add    
+                push constant 40
+                add   
                     """;
             assertEquals(expected, actual);
     }
