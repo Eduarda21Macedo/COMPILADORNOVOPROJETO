@@ -285,6 +285,7 @@ public class Parser {
         expectPeek(IDENT);
         parseSubroutineCall();
         expectPeek(SEMICOLON);
+        vmWriter.writePop(Segment.TEMP, 0);
         printNonTerminal("/doStatement");
     }
 
@@ -507,6 +508,17 @@ public class Parser {
                     var nlocals = symbTable.varCount(Kind.VAR);
     
             vmWriter.writeFunction(functionName, nlocals);
+
+            if (subroutineType == CONSTRUCTOR) {
+                vmWriter.writePush(Segment.CONST, symbTable.varCount(Kind.FIELD));
+                vmWriter.writeCall("Memory.alloc", 1);
+                vmWriter.writePop(Segment.POINTER, 0);
+            }
+    
+            if (subroutineType == METHOD) {
+                vmWriter.writePush(Segment.ARG, 0);
+                vmWriter.writePop(Segment.POINTER, 0);
+            }
     
             parseStatements();
             expectPeek(RBRACE);
