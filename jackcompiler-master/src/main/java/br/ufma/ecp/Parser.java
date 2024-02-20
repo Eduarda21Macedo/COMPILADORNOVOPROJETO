@@ -1,8 +1,10 @@
 package br.ufma.ecp;
 
+import static br.ufma.ecp.token.TokenType.*;
+
+import br.ufma.ecp.VMWriter.Segment;
 import br.ufma.ecp.token.Token;
 import br.ufma.ecp.token.TokenType;
-import static br.ufma.ecp.token.TokenType.*;
 
 public class Parser {
 
@@ -113,6 +115,8 @@ public class Parser {
         switch (peekToken.type) {
             case NUMBER:
                 expectPeek(NUMBER);
+                vmWriter.writePush(Segment.CONST, Integer.parseInt(currentToken.lexeme));
+
                 break;
             case STRING:
                 expectPeek(STRING);
