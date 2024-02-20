@@ -1,14 +1,10 @@
 package br.ufma.ecp;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import org.junit.Test;
-
-import br.ufma.ecp.token.Token;
-import br.ufma.ecp.token.TokenType;
 
 
 public class CodeGenerationTest extends TestSupport {
@@ -24,6 +20,23 @@ public class CodeGenerationTest extends TestSupport {
         String actual = parser.VMOutput();
         String expected = """
                 push constant 10       
+                    """;
+            assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testSimpleExpression () {
+        var input = """
+            10 + 30
+            """;
+        
+        var parser = new Parser(input.getBytes(StandardCharsets.UTF_8));
+        parser.parseExpression();
+        String actual = parser.VMOutput();
+        String expected = """
+                push constant 10
+                push constant 30
+                add       
                     """;
             assertEquals(expected, actual);
     }
